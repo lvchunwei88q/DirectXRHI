@@ -17,7 +17,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 int main(int argc, char* argv[])
 {
-    RHI::RHIType type = RHI::RHIType::DirectX12;
+    RHI::RHIType type = RHI::RHIType::DirectX11;
     
     if (argc > 1 && strcmp(argv[1], "dx12") == 0) {
         type = RHI::RHIType::DirectX12;
