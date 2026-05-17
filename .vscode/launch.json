@@ -1,0 +1,24 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch",
+            "type":"lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/out/bin/RHIDx11AndDx12.exe",
+            "args": [],
+            "cwd": "${workspaceRoot}"
+        }
+    ]
+
+    // ============================================================
+    // 此配置依赖以下插件才能正常工作：
+    //    - kylinideteam.cmake-intellisence
+    //    - vadimcn.vscode-lldb
+    //    - franneck94.c-cpp-runner
+    //    - nilssoderman.batch-runner
+    // ============================================================
+}
