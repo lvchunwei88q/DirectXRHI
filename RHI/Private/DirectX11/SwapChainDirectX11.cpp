@@ -54,6 +54,9 @@ namespace RHI
             m_pSwapChain.GetAddressOf()
         ));
 
+        // This RHI does not support fullscreen transitions.
+        ThrowIfFailed(factory->MakeWindowAssociation(static_cast<HWND>(desc.WindowHandle), DXGI_MWA_NO_ALT_ENTER));
+
         ComPtr<ID3D11Texture2D> backBuffer;
         ThrowIfFailed(m_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer)));
 
