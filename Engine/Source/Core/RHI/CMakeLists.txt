@@ -23,3 +23,5 @@ target_link_libraries(RHI
         dxgi.lib
         dxguid.lib
 )
+
+target_link_libraries(RHI PRIVATE Core)

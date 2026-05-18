@@ -1,6 +1,11 @@
 #pragma once
 #include <cstdint>
 
+#define MAX_uint32_t 0xFFFFFFFF
+#define MAX_uint8_t 0xFF
+
+namespace RHI
+{
 /** An enumeration of the different RHI reference types. */
 enum RHIResourceType : uint8_t
 {
@@ -47,3 +52,44 @@ enum RHIResourceType : uint8_t
 
 	RRT_Num
 };
+
+enum class RHIDescriptorHeapType : uint8_t
+{
+	Standard,
+	Sampler,
+	RenderTarget,
+	DepthStencil,
+	Count,
+	Invalid = MAX_uint8_t
+};
+
+enum class SamplerFilter : uint8_t
+{
+	Point,
+	Bilinear,
+	Trilinear,
+	Anisotropic
+};
+
+enum class SamplerAddressMode : uint8_t
+{
+	Wrap,
+	Mirror,
+	Clamp,
+	Border,
+	MirrorOnce
+};
+
+enum class SamplerComparisonFunc : uint8_t
+{
+	Never,
+	Less,
+	Equal,
+	LessEqual,
+	Greater,
+	NotEqual,
+	GreaterEqual,
+	Always
+};
+
+}

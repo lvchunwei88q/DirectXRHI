@@ -9,8 +9,28 @@
 #define RHI_SWAP_CHAIN_CLOSE_FULL_SCREEN 1
 #endif
 
+#ifndef RHI_DESCRIPTOR_HEAP_SIZE_STANDARD
+#define RHI_DESCRIPTOR_HEAP_SIZE_STANDARD 1024
+#endif
+
+#ifndef RHI_DESCRIPTOR_HEAP_SIZE_SAMPLER
+#define RHI_DESCRIPTOR_HEAP_SIZE_SAMPLER 256
+#endif
+
+#ifndef RHI_DESCRIPTOR_HEAP_SIZE_RENDER_TARGET
+#define RHI_DESCRIPTOR_HEAP_SIZE_RENDER_TARGET 32
+#endif
+
+#ifndef RHI_DESCRIPTOR_HEAP_SIZE_DEPTH_STENCIL
+#define RHI_DESCRIPTOR_HEAP_SIZE_DEPTH_STENCIL 32
+#endif
+
 namespace RHI
 {
+    // forward declarations
+    class RHISamplerState;
+    struct SamplerStateDesc;
+
     enum class RHIType
     {
         DirectX11,
@@ -37,6 +57,9 @@ namespace RHI
         virtual bool IsValid() const = 0;
         virtual RHIType GetType() const = 0;
         virtual const std::wstring& GetAdapterName() const = 0;
+
+        virtual std::shared_ptr<RHISamplerState> CreateSamplerState(const SamplerStateDesc& desc) = 0;
+        virtual void DeleteSamplerState(std::shared_ptr<RHI::RHISamplerState>& samplerState) = 0;
 
         static std::unique_ptr<Device> Create(RHIType type);
     };

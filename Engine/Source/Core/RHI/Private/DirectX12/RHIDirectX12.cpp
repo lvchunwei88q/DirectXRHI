@@ -1,4 +1,5 @@
 #include "DirectX12/RHIDirectX12.h"
+#include "DirectX12/RHIResourceDirectX12.h"
 #include "DirectXHelper.h"
 
 namespace RHI
@@ -136,6 +137,37 @@ namespace RHI
     
         ThrowIfFailed(m_pDevice->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&m_pCommandQueue)));
 
+        m_StandardDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+        m_SamplerDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
+        m_RTVDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+        m_DSVDescriptorSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+
+        // -------------------- Create descriptor heaps --------------------
+        D3D12_DESCRIPTOR_HEAP_DESC standardHeapDesc = {};
+        standardHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+        standardHeapDesc.NumDescriptors = RHI_DESCRIPTOR_HEAP_SIZE_STANDARD;
+        standardHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+        ThrowIfFailed(m_pDevice->CreateDescriptorHeap(&standardHeapDesc, IID_PPV_ARGS(&m_pStandardHeap)));
+
+        D3D12_DESCRIPTOR_HEAP_DESC samplerHeapDesc = {};
+        samplerHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
+        samplerHeapDesc.NumDescriptors = RHI_DESCRIPTOR_HEAP_SIZE_SAMPLER;
+        samplerHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+        ThrowIfFailed(m_pDevice->CreateDescriptorHeap(&samplerHeapDesc, IID_PPV_ARGS(&m_pSamplerHeap)));
+
+        D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = {};
+        rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+        rtvHeapDesc.NumDescriptors = RHI_DESCRIPTOR_HEAP_SIZE_RENDER_TARGET;
+        rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+        ThrowIfFailed(m_pDevice->CreateDescriptorHeap(&rtvHeapDesc, IID_PPV_ARGS(&m_pRTVHeap)));
+
+        D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc = {};
+        dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+        dsvHeapDesc.NumDescriptors = RHI_DESCRIPTOR_HEAP_SIZE_DEPTH_STENCIL;
+        dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+        ThrowIfFailed(m_pDevice->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&m_pDSVHeap)));
+        // -------------------- Create descriptor heaps End --------------------
+
 #ifdef _DEBUG
         ComPtr<ID3D12InfoQueue> infoQueue;
         if (SUCCEEDED(m_pDevice.As(&infoQueue)))
@@ -149,8 +181,54 @@ namespace RHI
 
     void RHIDirectX12::Shutdown()
     {
-        m_pDevice.Reset();
+        m_pDSVHeap.Reset();
+        m_pRTVHeap.Reset();
+        m_pSamplerHeap.Reset();
+        m_pStandardHeap.Reset();
         m_pCommandQueue.Reset();
+        m_pDevice.Reset();
+    }
+
+    D3D12_CPU_DESCRIPTOR_HANDLE RHIDirectX12::GetStandardCPUHandle(uint32_t index) const
+    {
+        D3D12_CPU_DESCRIPTOR_HANDLE handle = m_pStandardHeap->GetCPUDescriptorHandleForHeapStart();
+        handle.ptr += index * m_StandardDescriptorSize;
+        return handle;
+    }
+
+    D3D12_GPU_DESCRIPTOR_HANDLE RHIDirectX12::GetStandardGPUHandle(uint32_t index) const
+    {
+        D3D12_GPU_DESCRIPTOR_HANDLE handle = m_pStandardHeap->GetGPUDescriptorHandleForHeapStart();
+        handle.ptr += index * m_StandardDescriptorSize;
+        return handle;
+    }
+
+    D3D12_CPU_DESCRIPTOR_HANDLE RHIDirectX12::GetSamplerCPUHandle(uint32_t index) const
+    {
+        D3D12_CPU_DESCRIPTOR_HANDLE handle = m_pSamplerHeap->GetCPUDescriptorHandleForHeapStart();
+        handle.ptr += index * m_SamplerDescriptorSize;
+        return handle;
+    }
+
+    D3D12_GPU_DESCRIPTOR_HANDLE RHIDirectX12::GetSamplerGPUHandle(uint32_t index) const
+    {
+        D3D12_GPU_DESCRIPTOR_HANDLE handle = m_pSamplerHeap->GetGPUDescriptorHandleForHeapStart();
+        handle.ptr += index * m_SamplerDescriptorSize;
+        return handle;
+    }
+
+    D3D12_CPU_DESCRIPTOR_HANDLE RHIDirectX12::GetRTVCPUHandle(uint32_t index) const
+    {
+        D3D12_CPU_DESCRIPTOR_HANDLE handle = m_pRTVHeap->GetCPUDescriptorHandleForHeapStart();
+        handle.ptr += index * m_RTVDescriptorSize;
+        return handle;
+    }
+
+    D3D12_CPU_DESCRIPTOR_HANDLE RHIDirectX12::GetDSVCPUHandle(uint32_t index) const
+    {
+        D3D12_CPU_DESCRIPTOR_HANDLE handle = m_pDSVHeap->GetCPUDescriptorHandleForHeapStart();
+        handle.ptr += index * m_DSVDescriptorSize;
+        return handle;
     }
 
     bool RHIDirectX12::IsValid() const

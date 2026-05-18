@@ -1,7 +1,11 @@
+#include "Engine/Source/Core/Core/Public/Core.h"
 #include <iostream>
 #include <windows.h>
 #include <cstring>
+
+#include <Core.h>
 #include <RHI.h>
+#include <RHIResource.h>
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -17,6 +21,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 int main(int argc, char* argv[])
 {
+    std::cout << "Engine Version: " << Core::Core::GetVersion() << std::endl;
+
     RHI::RHIType type = RHI::RHIType::DirectX11;
     
     if (argc > 1 && strcmp(argv[1], "dx12") == 0) {
@@ -26,7 +32,7 @@ int main(int argc, char* argv[])
         std::cout << "Using DirectX11" << std::endl;
     }
 
-    const char CLASS_NAME[] = "RHIWindowClass";
+    const wchar_t CLASS_NAME[] = L"RHIWindowClass";
     
     WNDCLASS wc = {0};
     wc.lpfnWndProc = WindowProc;
@@ -39,7 +45,7 @@ int main(int argc, char* argv[])
     HWND hwnd = CreateWindowEx(
         0,
         CLASS_NAME,
-        type == RHI::RHIType::DirectX11 ? "RHI DirectX11 Window" : "RHI DirectX12 Window",
+        type == RHI::RHIType::DirectX11 ? L"RHI DirectX11 Window" : L"RHI DirectX12 Window",
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, 800, 600,
         nullptr,
@@ -74,12 +80,29 @@ int main(int argc, char* argv[])
         if (swapChain && swapChain->Initialize(device.get(), swapChainDesc))
         {
             std::cout << "SwapChain created successfully!" << std::endl;
-            
-            MSG msg = {};
-            while (GetMessage(&msg, nullptr, 0, 0))
+
+            // 现在测试创建采样器
+            RHI::SamplerStateDesc desc{};
+            desc.Filter = RHI::SamplerFilter::Trilinear;
+            desc.AddressU = RHI::SamplerAddressMode::Clamp;
+            std::shared_ptr<RHI::RHISamplerState> sampler = device->CreateSamplerState(desc);
+            device->DeleteSamplerState(sampler);
+            std::shared_ptr<RHI::RHISamplerState> sampler1 = device->CreateSamplerState(desc);
+            std::shared_ptr<RHI::RHISamplerState> sampler2 = device->CreateSamplerState(desc);
+            if (sampler2 && sampler1)
             {
-                TranslateMessage(&msg);
-                DispatchMessage(&msg);
+                std::cout << "SamplerState created successfully!" << std::endl;
+
+                MSG msg = {};
+                while (GetMessage(&msg, nullptr, 0, 0))
+                {
+                    TranslateMessage(&msg);
+                    DispatchMessage(&msg);
+                }
+            }
+            else
+            {
+                std::cout << "Failed to create SamplerState!" << std::endl;
             }
         }
         else
