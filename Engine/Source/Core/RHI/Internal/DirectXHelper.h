@@ -1,4 +1,10 @@
 #pragma once
+using HRESULT = long;
+using UINT = unsigned int;
+
+#ifndef FAILED
+#define FAILED(hr) (((HRESULT)(hr)) < 0)
+#endif
 
 #include <stdexcept>
 
