@@ -3,7 +3,7 @@
 #include "Common/RHI_API.h"
 #include "Common/RHIResourceType.h"
 #include <string>
-#include <atomic>
+#include <memory>
 
 #ifndef RHI_ENABLE_RESOURCE_INFO
     #ifdef _DEBUG
@@ -43,43 +43,28 @@ namespace RHI
     };
 
     /** The base type of RHI resources. */
-    class RHI_API RHIResource
+    class RHI_API RHIResource : public std::enable_shared_from_this<RHIResource>
     {
     public:
-        RHIResource(RHIResourceType InType) : Type(InType) {}
+        explicit RHIResource(RHIResourceType InType) : Type(InType) {}
         virtual ~RHIResource() = default;
-        
-        // Copying is prohibited
+
         RHIResource(const RHIResource&) = delete;
         RHIResource& operator=(const RHIResource&) = delete;
-        
-        // Reference counting
-        uint32_t AddRef()
-        {
-            return ++RefCount;
-        }
-        
-        uint32_t Release()
-        {
-            uint32_t NewCount = --RefCount;
-            if (NewCount == 0)
-            {
-                delete this;
-            }
-            return NewCount;
-        }
-        
-        uint32_t GetRefCount() const { return RefCount; }
-        
-        // type
+
         RHIResourceType GetType() const { return Type; }
-        
+
 #if RHI_ENABLE_RESOURCE_INFO
         virtual void GetInfo(RHIResourceInfo& OutInfo) const;
 #endif
 
+        // get shared_ptr
+        std::shared_ptr<RHIResource> GetSharedPtr()
+        {
+            return shared_from_this();
+        }
+
     protected:
-        std::atomic<uint32_t> RefCount{ 1 }; 
         RHIResourceType Type;
     };
 } // namespace RHI
