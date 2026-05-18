@@ -22,6 +22,9 @@ namespace RHI
         RHIType GetType() const override { return RHIType::DirectX11; }
         const std::wstring& GetAdapterName() const override { return m_AdapterName; }
 
+        std::shared_ptr<RHISamplerState> CreateSamplerState(const SamplerStateDesc& desc) override;
+        void DeleteSamplerState(std::shared_ptr<RHI::RHISamplerState>& samplerState) override;
+
         const D3D_FEATURE_LEVEL& GetFeatureLevel() const { return m_FeatureLevel; }
         ID3D11Device* GetDevice() const { return m_pDevice.Get(); }
         ID3D11DeviceContext* GetDeviceContext() const { return m_pDeviceContext.Get(); }

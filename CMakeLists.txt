@@ -1,9 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 project(RHIDx11AndDx12)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+include(${PROJECT_SOURCE_DIR}/Engine/Cmake/common.cmake)
+include(${PROJECT_SOURCE_DIR}/Engine/Cmake/macro.cmake)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/out/bin")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECT_SOURCE_DIR}/out/bin")
@@ -17,10 +16,12 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/out/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${PROJECT_SOURCE_DIR}/out/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${PROJECT_SOURCE_DIR}/out/lib")
 
-add_subdirectory(RHI)
+# add engine modules
+EngineModule(Core/Core)
+EngineModule(Core/RHI)
 
 add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE RHI)
+target_link_libraries(${PROJECT_NAME} PRIVATE RHI Core)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
