@@ -187,32 +187,32 @@ namespace RHI
         buffer.reset();
     }
 
-    void GraphicsCommandListDirectX12::BeginRecording()
+    void CommandListDirectX12::BeginRecording()
     {
         ThrowIfFailed(m_pCommandAllocator->Reset());
         ThrowIfFailed(m_pCommandList->Reset(m_pCommandAllocator.Get(), nullptr));
     }
 
-    void GraphicsCommandListDirectX12::EndRecording()
+    void CommandListDirectX12::EndRecording()
     {
         ThrowIfFailed(m_pCommandList->Close());
     }
 
-    void GraphicsCommandQueueDirectX12::ExecuteCommandLists(const std::vector<std::shared_ptr<RHICommandList>>& cmdLists)
+    void CommandQueueDirectX12::ExecuteCommandLists(const std::vector<std::shared_ptr<RHICommandList>>& cmdLists)
     {
         std::vector<ID3D12CommandList*> d3dCmdLists;
         d3dCmdLists.reserve(cmdLists.size());
         
         for (const auto& cmdList : cmdLists)
         {
-            auto dx12CmdList = std::static_pointer_cast<GraphicsCommandListDirectX12>(cmdList);
+            auto dx12CmdList = std::static_pointer_cast<CommandListDirectX12>(cmdList);
             d3dCmdLists.push_back(dx12CmdList->GetCommandList());
         }
         
         m_pCommandQueue->ExecuteCommandLists((UINT)d3dCmdLists.size(), d3dCmdLists.data());
     }
 
-    void GraphicsCommandQueueDirectX12::WaitForIdle()
+    void CommandQueueDirectX12::WaitForIdle()
     {
         UINT64 fenceValue = ++m_FenceValue;
         ThrowIfFailed(m_pCommandQueue->Signal(m_Fence.Get(), fenceValue));
@@ -226,7 +226,7 @@ namespace RHI
         }
     }
 
-    uint64_t GraphicsCommandQueueDirectX12::Signal()
+    uint64_t CommandQueueDirectX12::Signal()
     {
         if (!m_Fence)
         {
@@ -238,12 +238,12 @@ namespace RHI
         return fenceValue;
     }
 
-    bool GraphicsCommandQueueDirectX12::GetTimestampFrequency(uint64_t* frequency)
+    bool CommandQueueDirectX12::GetTimestampFrequency(uint64_t* frequency)
     {
         return SUCCEEDED(m_pCommandQueue->GetTimestampFrequency(frequency));
     }
 
-    bool GraphicsCommandQueueDirectX12::SetEventOnCompletion(uint64_t fenceValue, void* hEvent)
+    bool CommandQueueDirectX12::SetEventOnCompletion(uint64_t fenceValue, void* hEvent)
     {
         if (!m_Fence)
         {
@@ -252,7 +252,7 @@ namespace RHI
         return SUCCEEDED(m_Fence->SetEventOnCompletion(fenceValue, (HANDLE)hEvent));
     }
 
-    uint64_t GraphicsCommandQueueDirectX12::GetCompletedValue() const
+    uint64_t CommandQueueDirectX12::GetCompletedValue() const
     {
         if (m_Fence)
         {
