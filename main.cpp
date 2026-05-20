@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 {
     std::cout << "Engine Version: " << Core::Core::GetVersion() << std::endl;
 
-    RHI::RHIType type = RHI::RHIType::DirectX11;
+    RHI::RHIType type = RHI::GetBestAvailableRHI();
     
     if (argc > 1 && strcmp(argv[1], "dx12") == 0) {
         type = RHI::RHIType::DirectX12;
