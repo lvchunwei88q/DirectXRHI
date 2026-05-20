@@ -63,6 +63,37 @@ std::vector<Vertex> GenerateRandomVertices(size_t targetSizeMB)
     return vertices;
 }
 
+#include <psapi.h>
+#pragma comment(lib, "psapi.lib")
+
+std::vector<std::string> GetLoadedDLLs()
+{
+    std::vector<std::string> dlls;
+    
+    HANDLE hProcess = GetCurrentProcess();
+    HMODULE modules[1024];
+    DWORD needed;
+    
+    if (EnumProcessModules(hProcess, modules, sizeof(modules), &needed))
+    {
+        DWORD count = needed / sizeof(HMODULE);
+        char filename[MAX_PATH];
+        
+        for (DWORD i = 0; i < count; i++)
+        {
+            if (GetModuleFileNameExA(hProcess, modules[i], filename, sizeof(filename)))
+            {
+                // 只提取文件名（不含路径）
+                std::string fullPath = filename;
+                size_t pos = fullPath.find_last_of("\\/");
+                std::string dllName = (pos != std::string::npos) ? fullPath.substr(pos + 1) : fullPath;
+                dlls.push_back(dllName);
+            }
+        }
+    }
+    
+    return dlls;
+}
 
 int main(int argc, char* argv[])
 {
@@ -126,6 +157,12 @@ int main(int argc, char* argv[])
 
     RHI::IRHILoader* loader = RHI::GetLoader();
     loader->Load(type);
+
+    // 打印已加载的DLL
+    std::vector<std::string> loadedDLLs = GetLoadedDLLs();
+    for (const std::string& dll : loadedDLLs) {
+        std::cout << "Loaded DLL: " << dll << std::endl;
+    }
     
     auto device = loader->CreateDevice();
     if (device && device->Initialize())
@@ -139,7 +176,7 @@ int main(int argc, char* argv[])
         swapChainDesc.Height = 600;
         swapChainDesc.VSync = false;
         
-        auto swapChain = loader->CreateSwapChain(device.get(), swapChainDesc);
+        auto swapChain = loader->CreateSwapChain();
         if (swapChain && swapChain->Initialize(device.get(), swapChainDesc))
         {
             std::cout << "SwapChain created successfully!" << std::endl;

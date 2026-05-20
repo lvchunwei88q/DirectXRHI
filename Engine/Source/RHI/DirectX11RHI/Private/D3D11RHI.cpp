@@ -8,12 +8,15 @@ namespace RHI
 {
     DIRECTX11RHI_API CreateDevice_Function
     {
-        return std::make_unique<RHIDirectX11>();
+        auto device = std::make_unique<RHIDirectX11>();
+        if (device) {
+            return device;
+        }
+        return nullptr;
     }
     
     DIRECTX11RHI_API CreateSwapChain_Function
     {
-        RHIDirectX11* d3d11Device = static_cast<RHIDirectX11*>(device);
         auto swapChain = std::make_unique<SwapChainDirectX11>();
         if (swapChain) {
             return swapChain;

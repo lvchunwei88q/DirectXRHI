@@ -76,10 +76,10 @@ namespace RHI
         return nullptr;
     }
 
-    std::unique_ptr<SwapChain> RHILoader::CreateSwapChain(Device* device, const SwapChainDesc& desc)
+    std::unique_ptr<SwapChain> RHILoader::CreateSwapChain()
     {
         if (m_CreateSwapChain) {
-            return m_CreateSwapChain(device, desc);
+            return m_CreateSwapChain();
         }
         return nullptr;
     }

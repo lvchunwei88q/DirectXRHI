@@ -15,14 +15,14 @@ namespace RHI
         RHILoader() = default;
         ~RHILoader();
 
-        bool Load(RHIType type);
-        void Unload();
+        bool Load(RHIType type) override;
+        void Unload() override;
         
-        std::unique_ptr<Device> CreateDevice();
-        std::unique_ptr<SwapChain> CreateSwapChain(Device* device, const SwapChainDesc& desc);
+        std::unique_ptr<Device> CreateDevice() override;
+        std::unique_ptr<SwapChain> CreateSwapChain() override;
         
-        bool IsLoaded() const { return m_hModule != nullptr; }
-        RHIType GetLoadedRHIType() const { return m_loadedType; }
+        bool IsLoaded() const override { return m_hModule != nullptr; }
+        RHIType GetLoadedRHIType() const override { return m_loadedType; }
         
     private:
         
