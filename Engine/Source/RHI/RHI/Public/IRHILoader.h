@@ -23,7 +23,7 @@ namespace RHI
         virtual void Unload() = 0;
         
         virtual std::unique_ptr<Device> CreateDevice() = 0;
-        virtual std::unique_ptr<SwapChain> CreateSwapChain(Device* device, const SwapChainDesc& desc) = 0;
+        virtual std::unique_ptr<SwapChain> CreateSwapChain() = 0;
         
         virtual bool IsLoaded() const = 0;
         virtual RHIType GetLoadedRHIType() const = 0;
