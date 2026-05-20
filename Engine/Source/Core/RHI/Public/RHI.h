@@ -2,6 +2,7 @@
 
 #include "Common/RHI_API.h"
 #include "Common/RHIResourceType.h"
+#include "Common/RHIPlatformDetection.h"
 
 #include <memory>
 #include <string>
@@ -44,12 +45,6 @@ namespace RHI
     class RHIBuffer;
     struct SamplerStateDesc;
     struct BufferDesc;
-
-    enum class RHIType
-    {
-        DirectX11,
-        DirectX12
-    };
 
     struct SwapChainDesc
     {
