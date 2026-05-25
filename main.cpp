@@ -245,6 +245,8 @@ int main(int argc, char* argv[])
                             DispatchMessage(&msg);
                         }
                     }
+                }else{
+                    std::cout << "Failed to create RootSignature!" << std::endl;
                 }
             }
             else

@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <mutex>
 #include <array>
-#include <stdexcept>
+#include "DirectXHelper.h"
 
 namespace RHI
 {
@@ -28,14 +28,17 @@ namespace RHI
             
             if (m_NextIndex >= MaxDescriptors)
             {
-                throw std::runtime_error("Descriptor heap full!");
+                ThrowErrorMessage("Descriptor heap full!");
             }
             return m_NextIndex++;
         }
         
         void Free(uint32_t index)
         {
-            if (index >= MaxDescriptors) return; 
+            if (index >= MaxDescriptors){
+                ThrowErrorMessage("Descriptor heap index out of range!");
+                return;
+            }; 
             
             std::lock_guard<std::mutex> lock(m_Mutex);
             if (m_FreeCount < MaxDescriptors)
