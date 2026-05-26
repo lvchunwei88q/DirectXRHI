@@ -15,4 +15,17 @@ namespace RHI
     };
 
     RHIType RHI_API GetBestAvailableRHI();
+    
+    inline bool IsMultiThreadingSupported(RHIType type) {
+        switch (type) {
+            case RHIType::DirectX12:
+                return true;  // 现代 API，原生支持多线程录制
+                
+            case RHIType::DirectX11:
+                return false; // 传统 API，需要特殊处理或禁用
+                
+            default:
+                return false;
+        }
+    }
 }

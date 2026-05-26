@@ -22,7 +22,7 @@ namespace RHI
         std::unique_ptr<SwapChain> CreateSwapChain() override;
         
         bool IsLoaded() const override { return m_hModule != nullptr; }
-        RHIType GetLoadedRHIType() const override { return m_loadedType; }
+        RHIType GetRHIType() const override { return m_loadedType; }
         
     private:
         
@@ -30,6 +30,6 @@ namespace RHI
         PFN_CreateDevice m_CreateDevice = nullptr;
         PFN_CreateSwapChain m_CreateSwapChain = nullptr;
         PFN_GetRHIType m_GetRHIType = nullptr;
-        RHIType m_loadedType = RHIType::DirectX11;
+        RHIType m_loadedType = RHIType::Unknown;
     };
 } // namespace RHI

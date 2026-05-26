@@ -1,4 +1,6 @@
 #include "Common/RHIPlatformDetection.h"
+
+#ifdef _WIN32
 #include <windows.h>
 
 /*
@@ -35,3 +37,4 @@ namespace RHI
         return RHIType::Unknown;
     }
 }
+#endif

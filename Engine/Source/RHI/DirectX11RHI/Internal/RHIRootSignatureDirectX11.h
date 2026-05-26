@@ -15,5 +15,8 @@ namespace RHI
         void Shutdown() override;
 
         bool IsValid() const override;
+
+    private:
+        
     };
 }

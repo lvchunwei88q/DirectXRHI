@@ -26,7 +26,7 @@ namespace RHI
         virtual std::unique_ptr<SwapChain> CreateSwapChain() = 0;
         
         virtual bool IsLoaded() const = 0;
-        virtual RHIType GetLoadedRHIType() const = 0;
+        virtual RHIType GetRHIType() const = 0;
     };
 
     RHI_API IRHILoader* GetLoader();
