@@ -137,6 +137,12 @@ namespace RHI
 
     std::shared_ptr<RHIBuffer> RHIDirectX11::CreateBuffer(BufferDesc& desc)
     {
+        auto isConstantBuffer = [](BufferBindFlag flag) -> bool {
+            return flag == BufferBindFlag::ConstantBuffer;
+        };
+        
+        desc.SizeInBytes = isConstantBuffer(desc.BindFlags) ? AlignUp(desc.SizeInBytes, 16) : desc.SizeInBytes;
+        
         D3D11_BUFFER_DESC bufferDesc = {};
         bufferDesc.ByteWidth = static_cast<UINT>(desc.SizeInBytes);
         bufferDesc.MiscFlags = 0;
