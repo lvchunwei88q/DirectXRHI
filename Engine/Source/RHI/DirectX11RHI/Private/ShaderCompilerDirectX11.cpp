@@ -4,8 +4,7 @@
 #include <d3dcompiler.h>
 #include <regex>
 
-#include <Converter.h>
-#include <FileManager.h>
+#include <IO.h>
 
 #include <CoreLogCapture/CoreLogCapture.h>
 
@@ -16,14 +15,14 @@ namespace RHI
         std::string ReadFileToString(const std::string& filePath)
         {
             // 检查文件是否存在
-            std::wstring filePathW = IO::Converter::ToWideString(filePath);
-            if (!IO::FileManager::Exists(filePathW))
+            std::wstring filePathW = IO::ToWideString(filePath);
+            if (!IO::Exists(filePathW))
             {
                 ThrowErrorMessage("Shader file not found: " + filePath);
                 return "";
             }
 
-            std::string content = IO::FileManager::ReadAllText(filePathW);
+            std::string content = IO::ReadAllText(filePathW);
             return content;
         }
 

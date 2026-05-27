@@ -4,8 +4,7 @@
 
 #include <include/Support/ErrorCodes.h>
 
-#include <Converter.h>
-#include <FileManager.h>
+#include <IO.h>
 
 #include <CoreLogCapture/CoreLogCapture.h>
 
@@ -76,14 +75,14 @@ namespace RHI
         std::string ReadFileToString(const std::string& filePath)
         {
             // 检查文件是否存在
-            std::wstring filePathW = IO::Converter::ToWideString(filePath);
-            if (!IO::FileManager::Exists(filePathW))
+            std::wstring filePathW = IO::ToWideString(filePath);
+            if (!IO::Exists(filePathW))
             {
                 ThrowErrorMessage("Shader file not found: " + filePath);
                 return "";
             }
 
-            std::string content = IO::FileManager::ReadAllText(filePathW);
+            std::string content = IO::ReadAllText(filePathW);
             return content;
         }
 
@@ -159,9 +158,9 @@ namespace RHI
         }
         
         // 转换字符串为 UTF-16
-        std::wstring sourceW = IO::Converter::ToWideString(source);
-        std::wstring entryPointW = IO::Converter::ToWideString(entryPoint);
-        std::wstring profileW = IO::Converter::ToWideString(profile);
+        std::wstring sourceW = IO::ToWideString(source);
+        std::wstring entryPointW = IO::ToWideString(entryPoint);
+        std::wstring profileW = IO::ToWideString(profile);
         
         // 创建源码 Blob
         ComPtr<IDxcBlobEncoding> sourceBlob;
@@ -172,7 +171,7 @@ namespace RHI
             &sourceBlob
         ));
 
-        std::wstring shaderPath = IO::Converter::ToWideString(basePath);
+        std::wstring shaderPath = IO::ToWideString(basePath);
         
         // 准备参数
         std::vector<LPCWSTR> args;

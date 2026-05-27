@@ -6,8 +6,7 @@
 
 #include <Core.h>
 #include <RHI.hpp>
-#include <AbsolutePath.h>
-#include <Converter.h>
+#include <IO.h>
 
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -200,7 +199,7 @@ int main(int argc, char* argv[])
 
                 std::cout << "Shader compilation..." << std::endl;
                 // 从文件编译顶点着色器
-                std::string exePath = IO::Converter::ToNarrowString(IO::AbsolutePath::Get().GetExecutableDirectory());
+                std::string exePath = IO::ToNarrowString(IO::AbsolutePath::Get().GetExecutableDirectory());
                 std::string shaderPath = exePath + "\\..\\..\\Test\\test.hlsl"; // 你知道的这只是一个测试示例
                 RHI::ShaderCompileDesc vsDesc{};
                 vsDesc.Type = RHI::ShaderType::Vertex;

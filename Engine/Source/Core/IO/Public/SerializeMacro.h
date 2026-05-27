@@ -2,8 +2,7 @@
 
 /*
 * 这个序列化宏定义了使用IO模块系统来进行加载与创建序列化数据，这也要求必须传入支持cereal序列化的类
-* #include <AbsolutePath.h>
-* #include <FileManager.h>
+* #include <IO.h>
 * #include <fstream>
 * #include <ILog.h>
 */
@@ -11,7 +10,7 @@
 const std::wstring object##_Executable = IO::AbsolutePath::Get().GetExecutableDirectory();				\
 const std::wstring object##_context_dir = object##_Executable + L"\\" + path;							\
 const std::wstring object##_context_path = object##_Executable + L"\\" + path + name;					\
-if (IO::FileManager::Exists(object##_context_path)) {													\
+if (IO::Exists(object##_context_path)) {													\
 	std::ifstream file(object##_context_path);															\
     try {																								\
 		cereal::BinaryInputArchive archive(file);														\
@@ -30,9 +29,9 @@ else {																									\
 		BinaryStr = oss.str();																			\
 	}																									\
 																										\
-	IO::FileManager::MakeDirectory(object##_context_dir);												\
-	IO::FileManager::MakeFile(object##_context_path);													\
-	IO::FileManager::WriteAllText(object##_context_path, BinaryStr);									\
+	IO::MakeDirectory(object##_context_dir);															\
+	IO::MakeFile(object##_context_path);																\
+	IO::WriteAllText(object##_context_path, BinaryStr);													\
 }																										
 
 #define FILE_SERIALIZATION_SAVE(object,path,name)														\
@@ -48,7 +47,7 @@ else {																									\
 		BinaryStr = oss.str();																			\
 	}																									\
 																										\
-	IO::FileManager::MakeDirectory(object##_context_dir);												\
-	IO::FileManager::MakeFile(object##_context_path);													\
-	IO::FileManager::WriteAllText(object##_context_path, BinaryStr);									\
+	IO::MakeDirectory(object##_context_dir);															\
+	IO::MakeFile(object##_context_path);																\
+	IO::WriteAllText(object##_context_path, BinaryStr);													\
 }
