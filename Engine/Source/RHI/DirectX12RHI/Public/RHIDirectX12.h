@@ -57,6 +57,10 @@ namespace RHI
 
         [[nodiscard]] std::shared_ptr<RHIRootSignature> CreateRootSignature(const RootSignatureDesc& desc) override;
         void DeleteRootSignature(std::shared_ptr<RHI::RHIRootSignature>& rootSignature) override;
+
+        [[nodiscard]] std::shared_ptr<RHIPipelineState> CreateGraphicsPipelineState(const GraphicsPipelineStateDesc& desc) override;
+        [[nodiscard]] std::shared_ptr<RHIPipelineState> CreateComputePipelineState(const ComputePipelineStateDesc& desc) override;
+        void DeletePipelineState(std::shared_ptr<RHIPipelineState>& pipelineState) override;
         
         FeatureLevel GetFeatureLevel() const override;
         ID3D12Device* GetDevice() const { return m_pDevice.Get(); }

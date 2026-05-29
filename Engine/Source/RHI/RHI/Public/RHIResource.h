@@ -302,4 +302,38 @@ namespace RHI
         RHIDepthStencilView() : RHIResource(RRT_ShaderResourceView) {}
     };
 
+    class RHIRootSignature;
+
+    struct GraphicsPipelineStateDesc
+    {
+        RHIRootSignature* pRootSignature = nullptr;
+        
+        RHIVertexShader* pVertexShader = nullptr;
+        RHIPixelShader* pPixelShader = nullptr;
+        RHIGeometryShader* pGeometryShader = nullptr;
+        RHIHullShader* pHullShader = nullptr;
+        RHIDomainShader* pDomainShader = nullptr;
+
+        RHIRasterizerState* pRasterizerState = nullptr;
+        RHIBlendState* pBlendState = nullptr;
+        RHIDepthStencilState* pDepthStencilState = nullptr;
+
+        uint32_t NumRenderTargets = 0;
+        uint32_t RenderTargetFormats[8] = {0};
+        uint32_t DepthStencilFormat = 0;
+    };
+
+    struct ComputePipelineStateDesc
+    {
+        RHIRootSignature* pRootSignature = nullptr;
+        RHIComputeShader* pComputeShader = nullptr;
+    };
+
+    class RHI_API RHIPipelineState : public RHIResource
+    {
+    public:
+        RHIPipelineState() : RHIResource(RRT_None) {}
+        virtual ~RHIPipelineState() = default;
+    };
+
 } // namespace RHI

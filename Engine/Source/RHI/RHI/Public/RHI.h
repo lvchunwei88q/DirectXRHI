@@ -59,6 +59,10 @@ namespace RHI
     class RHIRootSignature;
     struct RootSignatureDesc;
 
+    class RHIPipelineState;
+    struct GraphicsPipelineStateDesc;
+    struct ComputePipelineStateDesc;
+
     struct SwapChainDesc
     {
         void* WindowHandle;
@@ -99,6 +103,10 @@ namespace RHI
 
         [[nodiscard]] virtual std::shared_ptr<RHIRootSignature> CreateRootSignature(const RootSignatureDesc& desc) = 0;
         virtual void DeleteRootSignature(std::shared_ptr<RHIRootSignature>& rootSignature) = 0;
+
+        [[nodiscard]] virtual std::shared_ptr<RHIPipelineState> CreateGraphicsPipelineState(const GraphicsPipelineStateDesc& desc) = 0;
+        [[nodiscard]] virtual std::shared_ptr<RHIPipelineState> CreateComputePipelineState(const ComputePipelineStateDesc& desc) = 0;
+        virtual void DeletePipelineState(std::shared_ptr<RHIPipelineState>& pipelineState) = 0;
     };
 
     class RHI_API SwapChain

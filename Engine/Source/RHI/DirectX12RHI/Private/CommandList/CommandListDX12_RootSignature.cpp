@@ -1,5 +1,4 @@
 #include "RHICommandListDirectX12.h"
-#include "RHIResourceDirectX12.h"
 #include "DescriptorHeapDirectX12.h"
 #include "RHIRootSignatureDirectX12.h"
 
