@@ -8,8 +8,8 @@
             "name": "Launch",
             "type":"lldb",
             "request": "launch",
-            "program": "${workspaceRoot}/out/bin/RHIDx11AndDx12.exe",
-            "args": ["dx11"],
+            "program": "${workspaceRoot}/out/bin/MagicRHI.exe",
+            "args": ["dx12"],
             "cwd": "${workspaceRoot}"
         }
     ]
