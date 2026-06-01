@@ -43,6 +43,8 @@ enum RHIResourceType : uint8_t
 	RRT_Viewport,
 	RRT_UnorderedAccessView,
 	RRT_ShaderResourceView,
+	RRT_DepthStencilView,
+	RRT_RenderTargetView,
 	RRT_RayTracingAccelerationStructure,
 	RRT_RayTracingShaderBindingTable,
 	RRT_StagingBuffer,

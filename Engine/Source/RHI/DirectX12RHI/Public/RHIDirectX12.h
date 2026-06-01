@@ -43,6 +43,10 @@ namespace RHI
         void DeleteBuffer(std::shared_ptr<RHI::RHIBuffer>& buffer) override;
 
         RHIDescriptorHandle CreateStandardHeapDescriptorView(RHIBuffer* Buffer,DescriptorRangeType Type) override;
+        RHIDescriptorHandle CreateStandardHeapDescriptorView(RHITexture* Texture,DescriptorRangeType Type) override;
+        RHIDescriptorHandle CreateSamplerHeapDescriptorView(const SamplerStateDesc& desc) override;
+        RHIDescriptorHandle CreateRTVHeapDescriptorView(RHIRenderTargetView* InView) override;
+        RHIDescriptorHandle CreateDSVHeapDescriptorView(RHIDepthStencilView* InView) override;
 
         [[nodiscard]] std::shared_ptr<RHICommandList> CreateCommandList(RHICmdListType type) override;
         [[nodiscard]] std::shared_ptr<RHICommandQueue> GetCommandQueue(RHICmdListType Type) const override;

@@ -36,6 +36,10 @@ namespace RHI
         void DeleteBuffer(std::shared_ptr<RHI::RHIBuffer>& buffer) override;
         
         RHIDescriptorHandle CreateStandardHeapDescriptorView(RHIBuffer* Buffer,DescriptorRangeType Type) override;
+        RHIDescriptorHandle CreateStandardHeapDescriptorView(RHITexture* Texture,DescriptorRangeType Type) override;
+        RHIDescriptorHandle CreateSamplerHeapDescriptorView(const SamplerStateDesc& desc) override;
+        RHIDescriptorHandle CreateRTVHeapDescriptorView(RHIRenderTargetView* InView) override;
+        RHIDescriptorHandle CreateDSVHeapDescriptorView(RHIDepthStencilView* InView) override;
 
         [[nodiscard]] std::shared_ptr<RHICommandList> CreateCommandList(RHICmdListType type) override;
         [[nodiscard]] std::shared_ptr<RHICommandQueue> GetCommandQueue(RHICmdListType Type) const override;
@@ -60,11 +64,10 @@ namespace RHI
 
     private:
         ComPtr<ID3D11Device> m_pDevice;
-        // CommandQueue DirectX11
         ComPtr<ID3D11DeviceContext> m_pDeviceContext;
         std::wstring m_AdapterName;
         D3D_FEATURE_LEVEL m_FeatureLevel;
-        
+        // CommandQueue DirectX11
         std::shared_ptr<CommandQueueDirectX11> m_CommandQueue;
     };
 }

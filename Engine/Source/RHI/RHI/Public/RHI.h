@@ -47,6 +47,7 @@ namespace RHI
     struct RHIDescriptorHandle;
     class RHISamplerState;
     class RHIBuffer;
+    class RHITexture;
     struct SamplerStateDesc;
     struct BufferDesc;
     // forward shader type
@@ -85,6 +86,10 @@ namespace RHI
         virtual void DeleteBuffer(std::shared_ptr<RHIBuffer>& buffer) = 0;
 
         virtual RHIDescriptorHandle CreateStandardHeapDescriptorView(RHIBuffer* Buffer,DescriptorRangeType Type) = 0;
+        virtual RHIDescriptorHandle CreateStandardHeapDescriptorView(RHITexture* Texture,DescriptorRangeType Type) = 0;
+        virtual RHIDescriptorHandle CreateSamplerHeapDescriptorView(const SamplerStateDesc& desc) = 0;
+        virtual RHIDescriptorHandle CreateRTVHeapDescriptorView(class RHIRenderTargetView* InView) = 0;
+        virtual RHIDescriptorHandle CreateDSVHeapDescriptorView(class RHIDepthStencilView* InView) = 0;
 
         [[nodiscard]] virtual std::shared_ptr<RHICommandList> CreateCommandList(RHICmdListType type) = 0;
         [[nodiscard]] virtual std::shared_ptr<RHICommandQueue> GetCommandQueue(RHICmdListType Type) const = 0;

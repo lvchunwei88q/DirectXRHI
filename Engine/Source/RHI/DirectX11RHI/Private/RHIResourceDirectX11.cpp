@@ -187,10 +187,4 @@ namespace RHI
     {
         buffer.reset();
     }
-
-    RHIDescriptorHandle RHIDirectX11::CreateStandardHeapDescriptorView(RHIBuffer* Buffer,DescriptorRangeType Type)
-    {
-        Buffer->SetBindlessHandle(RHIDescriptorHandle(RHIDescriptorHeapType::Standard,0));
-        return Buffer->GetBindlessHandle();
-    }
 }
